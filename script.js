@@ -7,70 +7,22 @@ let gameOn = true;
 let pipes = [];
 let pipeInterval;
 
-document.addEventListener('keydown', flap);
-
-function flap(event) {
-    if (event.keyCode === 32) {
-        velocity = -5; // Increase this value to adjust jump height
-    }
+// Add event listeners based on the device type
+if ('ontouchstart' in window) {
+    // Touch devices (phones and tablets)
+    document.addEventListener('touchstart', flap);
+} else {
+    // Non-touch devices (laptops and desktops)
+    document.addEventListener('keydown', function(event) {
+        if (event.keyCode === 32) {
+            flap();
+        }
+    });
 }
 
-// function createPipe() {
-//     const pipe = document.createElement('div');
-//     pipe.classList.add('pipe');
-//     pipe.style.left = '400px'; // Start pipe from the right side
-//     pipe.style.bottom = '0';
-//     pipeContainer.appendChild(pipe);
-//     pipes.push(pipe);
-// }
-
-
-// function createPipe() {
-//     const pipe = document.createElement('div');
-//     pipe.classList.add('pipe');
-    
-//     // Generate random height for the top pipe
-//     const topPipeHeight = Math.floor(Math.random() * 200) + 100; // Adjust min and max heights as needed
-//     pipe.style.height = `${topPipeHeight}px`;
-
-//     // Create bottom pipe
-//     const bottomPipe = document.createElement('div');
-//     bottomPipe.classList.add('pipe');
-//     const bottomPipeHeight = 600 - topPipeHeight - 200; // Adjust the gap between pipes as needed
-//     bottomPipe.style.height = `${bottomPipeHeight}px`;
-
-//     pipe.appendChild(bottomPipe);
-    
-//     pipe.style.left = '400px'; // Start pipe from the right side
-//     pipeContainer.appendChild(pipe);
-//     pipes.push(pipe);
-// }
-
-// function createPipe() {
-//     const pipeGap = 200; // Define the gap between the top and bottom pipes
-//     const pipeWidth = 60; // Define the width of the pipes
-
-//     // Generate random height for the top pipe
-//     const topPipeHeight = Math.floor(Math.random() * (400 - pipeGap)) + 50; // Adjust min and max heights as needed
-
-//     // Create top pipe
-//     const topPipe = document.createElement('div');
-//     topPipe.classList.add('pipe');
-//     topPipe.style.height = `${topPipeHeight}px`;
-//     topPipe.style.left = '400px'; // Start pipe from the right side
-//     topPipe.style.bottom = `${topPipeHeight + pipeGap}px`;
-//     pipeContainer.appendChild(topPipe);
-//     pipes.push(topPipe);
-
-//     // Create bottom pipe
-//     const bottomPipeHeight = 600 - topPipeHeight - pipeGap;
-//     const bottomPipe = document.createElement('div');
-//     bottomPipe.classList.add('pipe');
-//     bottomPipe.style.height = `${bottomPipeHeight}px`;
-//     bottomPipe.style.left = '400px'; // Start pipe from the right side
-//     pipeContainer.appendChild(bottomPipe);
-//     pipes.push(bottomPipe);
-// }
+function flap() {
+    velocity = -5; // Increase this value to adjust jump height
+}
 
 function createPipe() {
     const pipeGap = 200; // Define the gap between the top and bottom pipes
@@ -92,33 +44,6 @@ function createPipe() {
     bottomPipe.style.left = '400px';
     pipeContainer.appendChild(bottomPipe);
     pipes.push(bottomPipe);
-}
-
-
-
-// function movePipes() {
-//     pipes.forEach(pipe => {
-//         let pipeLeft = parseInt(pipe.style.left);
-//         pipe.style.left = (pipeLeft - 2) + 'px'; // Adjust pipe speed here
-
-//         // Check if pipe is out of the screen, remove it
-//         if (pipeLeft < -60) {
-//             pipe.remove();
-//             pipes.shift();
-//         }
-
-//         // Check for collision with pipes
-//         if (pipeLeft > 50 && pipeLeft < 90 && checkCollision(bird, pipe)) {
-//             endGame();
-//         }
-//     });
-// }
-
-let score = 0;
-
-function updateScore() {
-    const scoreElement = document.getElementById('score');
-    scoreElement.innerText = `Score: ${score}`;
 }
 
 function movePipes() {
@@ -146,8 +71,6 @@ function movePipes() {
     });
 }
 
-
-
 function checkCollision(bird, pipe) {
     const birdRect = bird.getBoundingClientRect();
     const pipeRect = pipe.getBoundingClientRect();
@@ -159,20 +82,6 @@ function checkCollision(bird, pipe) {
         birdRect.left < pipeRect.right
     );
 }
-
-// function movePipes() {
-//     pipes.forEach(pipe => {
-//         let pipeLeft = parseInt(pipe.style.left);
-//         pipe.style.left = (pipeLeft - 2) + 'px'; // Adjust pipe speed here
-//         if (pipeLeft < -60) {
-//             pipe.remove();
-//             pipes.shift();
-//         }
-//         if (pipeLeft > 50 && pipeLeft < 90 && checkCollision(bird, pipe)) {
-//             endGame();
-//         }
-//     });
-// }
 
 function gameLoop() {
     if (!gameOn) return;
@@ -196,7 +105,6 @@ function endGame() {
     alert(`Game over! Your score is: ${score}. Refresh the page to play again.`);
 }
 
-
 pipeInterval = setInterval(createPipe, 1500); // Adjust pipe creation interval here
 
 // Display an initial alert before starting the game
@@ -204,4 +112,3 @@ alert("Get ready! The game will start shortly.");
 
 // Start the game loop after the alert
 gameLoop();
-
